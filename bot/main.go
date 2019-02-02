@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-    "strings"
 	"os"
 	"os/exec"
 	"os/signal"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -17,7 +17,7 @@ var (
 )
 
 func main() {
-    // Get Commandline args
+	// Get Commandline args
 	flag.Parse()
 	args := flag.Args()
 	if len(args) < 2 {
@@ -27,7 +27,7 @@ func main() {
 	Token = args[0]
 	OwnerID = args[1]
 
-    // Create session
+	// Create session
 	dg, err := discordgo.New("Bot " + Token)
 	if err != nil {
 		fmt.Println("ERROR Cannnot create Discord session", err)
@@ -36,15 +36,15 @@ func main() {
 
 	dg.AddHandler(responseCommand)
 
-    // Open socket
+	// Open socket
 	err = dg.Open()
 	if err != nil {
 		fmt.Println("ERROR Cannot open Websocket connection")
 		return
 	}
 
-    // Waiting Interrupt
-    fmt.Println("Bot is ready. Press Ctrl-C to exit.")
+	// Waiting Interrupt
+	fmt.Println("Bot is ready. Press Ctrl-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, os.Interrupt)
 	<-sc
@@ -54,13 +54,13 @@ func main() {
 
 func responseCommand(session *discordgo.Session, msg *discordgo.MessageCreate) {
 	var send_text string
-    var command string
+	var command string
 
-	if msg.Author.ID == session.State.User.ID || !strings.HasPrefix(msg.Content, "!mcs"){
+	if msg.Author.ID == session.State.User.ID || !strings.HasPrefix(msg.Content, "!mcs") {
 		return
 	} else {
-        command =  string(msg.Content[4:])
-    }
+		command = string(msg.Content[4:])
+	}
 
 	switch command {
 	case " ping":
@@ -69,7 +69,7 @@ func responseCommand(session *discordgo.Session, msg *discordgo.MessageCreate) {
 	case " start":
 		if msg.Author.ID != OwnerID {
 			send_text = ":no_good: 駄目です"
-            break
+			break
 		}
 
 		out, err := exec.Command("../script/start.sh").Output()
@@ -82,7 +82,7 @@ func responseCommand(session *discordgo.Session, msg *discordgo.MessageCreate) {
 	case " stop":
 		if msg.Author.ID != OwnerID {
 			send_text = ":no_good: 駄目です"
-            break
+			break
 		}
 
 		out, err := exec.Command("../script/stop.sh").Output()
@@ -100,8 +100,8 @@ func responseCommand(session *discordgo.Session, msg *discordgo.MessageCreate) {
 			send_text = string(out)
 		}
 
-    default:
-        send_text = ":book: Usage: `!mcs [ ping | start | stop | status ]`"
+	default:
+		send_text = ":book: Usage: `!mcs [ ping | start | stop | status ]`"
 	}
 
 	session.ChannelMessageSend(msg.ChannelID, send_text)
