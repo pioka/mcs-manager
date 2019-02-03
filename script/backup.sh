@@ -11,8 +11,10 @@ if screen -list | grep -q 'mcs'; then
     sleep 1
     tar -zcf $BACKUP_DIRNAME/bu-`date '+%Y-%m%d-%H%M'`.tar.gz world 
     screen -r mcs -X stuff "save-on\r"
+
 else
     tar -zcf $BACKUP_DIRNAME/bu-`date '+%Y-%m%d-%H%M'`.tar.gz world
 fi
 
 popd > /dev/null
+

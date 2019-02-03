@@ -4,3 +4,4 @@ if screen -list | grep -q 'mcs'; then
 else
     echo ':black_heart: Server is stopped'
 fi
+
