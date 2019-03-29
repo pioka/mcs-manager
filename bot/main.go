@@ -53,7 +53,7 @@ func main() {
 }
 
 func responseCommand(session *discordgo.Session, msg *discordgo.MessageCreate) {
-	var send_text string
+	var sendText string
 	var command string
 
 	if msg.Author.ID == session.State.User.ID || !strings.HasPrefix(msg.Content, "!mcs") {
@@ -64,45 +64,45 @@ func responseCommand(session *discordgo.Session, msg *discordgo.MessageCreate) {
 
 	switch command {
 	case " ping":
-		send_text = ":ok_hand: Pong"
+		sendText = ":ok_hand: Pong"
 
 	case " start":
 		if msg.Author.ID != OwnerID {
-			send_text = ":no_good: 駄目です"
+			sendText = ":no_good: 駄目です"
 			break
 		}
 
 		out, err := exec.Command("../script/start.sh").Output()
 		if err != nil {
-			send_text = ":warning: Command failed"
+			sendText = ":warning: Command failed"
 		} else {
-			send_text = string(out)
+			sendText = string(out)
 		}
 
 	case " stop":
 		if msg.Author.ID != OwnerID {
-			send_text = ":no_good: 駄目です"
+			sendText = ":no_good: 駄目です"
 			break
 		}
 
 		out, err := exec.Command("../script/stop.sh").Output()
 		if err != nil {
-			send_text = ":warning: Command failed"
+			sendText = ":warning: Command failed"
 		} else {
-			send_text = string(out)
+			sendText = string(out)
 		}
 
 	case " status":
 		out, err := exec.Command("../script/get_status.sh").Output()
 		if err != nil {
-			send_text = ":warning: Command failed"
+			sendText = ":warning: Command failed"
 		} else {
-			send_text = string(out)
+			sendText = string(out)
 		}
 
 	default:
-		send_text = ":book: Usage: `!mcs [ ping | start | stop | status ]`"
+		sendText = ":book: Usage: `!mcs [ ping | start | stop | status ]`"
 	}
 
-	session.ChannelMessageSend(msg.ChannelID, send_text)
+	session.ChannelMessageSend(msg.ChannelID, sendText)
 }
